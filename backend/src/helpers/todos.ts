@@ -59,22 +59,22 @@ export async function deleteTodo(todo: TodoItem): Promise<void> {
 
 // Generate Upload Url
 
-export async function getUploadUrl(id: string, user_id: string): Promise<string> {
-    const todo = await todo_instance.getSingleTodo(id);
+export async function getUploadUrl(todoId: string, user_id: string): Promise<string> {
+    const todo = await todo_instance.getSingleTodo(todoId);
 
     if (!todo) throw new Error('Invalid Todo')
     if (todo.userId !== user_id) throw new Error('Todo does not belong to this user')
 
     const randomImageId = uuid.v4();
-    return await attachmentUtils.generateUploadUrl(randomImageId, id);
+    return await attachmentUtils.generateUploadUrl(randomImageId, todoId);
 }
 
 // Update Todo
 
-export async function updateTodo(id: string, user_id: string, updateTodoItem: TodoUpdate): Promise<void> {
-    const todo = await todo_instance.getSingleTodo(id);
+export async function updateTodo(todoId: string, user_id: string, updateTodoItem: TodoUpdate): Promise<void> {
+    const todo = await todo_instance.getSingleTodo(todoId);
 
     if (!todo) throw new Error('Invalid Todo')
     if (todo.userId !== user_id) throw new Error('Todo does not belong to this user')
-    return await todo_instance.updateTodo(id, updateTodoItem);
+    return await todo_instance.updateTodo(todoId, updateTodoItem);
 }

@@ -71,12 +71,11 @@ export class TodosAccess {
     }
 
     async deleteTodo(todo: TodoItem): Promise<void> {
-        const { userId, todoId } = todo;
+        const { todoId } = todo;
         const params = {
             TableName: this.todosTable,
             Key: {
                 todoId,
-                userId
             },
         };
         await this.docClient.delete(params).promise();
