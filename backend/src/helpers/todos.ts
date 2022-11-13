@@ -21,8 +21,8 @@ export async function getAllTodos(userId: string): Promise<TodoItem[]> {
 }
 
 // Get all todos by user
-export async function getSingleTodo(taskId: string): Promise<TodoItem> {
-    return await todo_instance.getSingleTodo(taskId);
+export async function getSingleTodo(todoId: string): Promise<TodoItem> {
+    return await todo_instance.getSingleTodo(todoId);
 }
 
 // Create Todos

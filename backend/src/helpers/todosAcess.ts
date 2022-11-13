@@ -82,11 +82,11 @@ export class TodosAccess {
         await this.docClient.delete(params).promise();
     }
 
-    async getSingleTodo(taskId: string): Promise<TodoItem> {
+    async getSingleTodo(todoId: string): Promise<TodoItem> {
         const result = await this.docClient.get({
             TableName: this.todosTable,
             Key: {
-                taskId
+                todoId: todoId
             }
         }).promise()
 
