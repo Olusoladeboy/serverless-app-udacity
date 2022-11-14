@@ -21,8 +21,8 @@ export async function getAllTodos(userId: string): Promise<TodoItem[]> {
 }
 
 // Get all todos by user
-export async function getSingleTodo(todoId: string): Promise<TodoItem> {
-    return await todo_instance.getSingleTodo(todoId);
+export async function getSingleTodo(todoId: string, userId: string): Promise<TodoItem> {
+    return await todo_instance.getSingleTodo(todoId, userId);
 }
 
 // Create Todos
@@ -60,21 +60,21 @@ export async function deleteTodo(todo: TodoItem): Promise<void> {
 // Generate Upload Url
 
 export async function getUploadUrl(todoId: string, user_id: string): Promise<string> {
-    const todo = await todo_instance.getSingleTodo(todoId);
+    const todo = await todo_instance.getSingleTodo(todoId, user_id);
 
     if (!todo) throw new Error('Invalid Todo')
     if (todo.userId !== user_id) throw new Error('Todo does not belong to this user')
 
     const randomImageId = uuid.v4();
-    return await attachmentUtils.generateUploadUrl(randomImageId, todoId);
+    return await attachmentUtils.generateUploadUrl(randomImageId, todoId, user_id);
 }
 
 // Update Todo
 
 export async function updateTodo(todoId: string, user_id: string, updateTodoItem: TodoUpdate): Promise<void> {
-    const todo = await todo_instance.getSingleTodo(todoId);
+    const todo = await todo_instance.getSingleTodo(todoId, user_id);
 
     if (!todo) throw new Error('Invalid Todo')
     if (todo.userId !== user_id) throw new Error('Todo does not belong to this user')
-    return await todo_instance.updateTodo(todoId, updateTodoItem);
+    return await todo_instance.updateTodo(todoId, user_id, updateTodoItem);
 }

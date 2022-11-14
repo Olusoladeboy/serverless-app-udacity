@@ -1,7 +1,8 @@
-import { getDocumentClient } from '@shelf/aws-ddb-with-xray';
+// import { getDocumentClient } from '@shelf/aws-ddb-with-xray';
 import * as AWS from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import * as AWSXRay from 'aws-xray-sdk'
+import { createDynamoDBClient } from './todosAcess';
 
 const XAWS = AWSXRay.captureAWS(AWS)
 
@@ -16,17 +17,17 @@ export class AttachmentUtils {
         private readonly bucketName = process.env.ATTACHMENT_S3_BUCKET,
         private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION,
         private readonly todosTable = process.env.TODOS_TABLE,
-        // private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
-        private readonly docClient: DocumentClient = getDocumentClient({
-            ddbParams: { region: 'us-east-1', convertEmptyValues: true },
-            ddbClientParams: { region: 'us-east-1' },
-        })
+        private readonly docClient: DocumentClient = createDynamoDBClient(),
+        // private readonly docClient: DocumentClient = getDocumentClient({
+        //     ddbParams: { region: 'us-east-1', convertEmptyValues: true },
+        //     ddbClientParams: { region: 'us-east-1' },
+        // })
     ) { }
 
-    async generateUploadUrl(imageId: string, todoId: string): Promise<string> {
+    async generateUploadUrl(imageId: string, todoId: string, userId: string): Promise<string> {
         const params = {
             TableName: this.todosTable,
-            Key: { todoId },
+            Key: { todoId, userId },
             UpdateExpression: 'set attachmentUrl = :attachmentUrl',
             ExpressionAttributeValues: {
                 ':attachmentUrl': `https://${this.bucketName}.s3.amazonaws.com/${imageId}`
