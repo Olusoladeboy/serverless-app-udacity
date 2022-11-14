@@ -13,9 +13,10 @@ export const handler = middy(
 
     // TODO: Implement creating a new TODO item
 
-    const { name } = newTodo;
+    const { name, dueDate } = newTodo;
 
     if (!name) throw new Error('Name is not allowed to be empty')
+    if (!dueDate) throw new Error('Due Date is not allowed to be empty')
 
     const item = await createTodo(user_id, newTodo)
 
